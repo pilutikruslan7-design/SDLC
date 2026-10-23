@@ -1,0 +1,34 @@
+@startuml MorseDecoder_Sequence
+title Ввод данных и обновление представления (активная модель)
+
+actor Пользователь
+participant MainForm
+participant MorseController
+participant InputForm
+participant MorseModel
+participant MorseTranslator
+
+Пользователь -> MainForm : нажимает «Ввести данные»
+MainForm -> MorseController : EnterDataRequested
+MorseController -> MorseModel : LastInput
+MorseModel --> MorseController : последние введённые данные
+loop пока ввод некорректен
+  MorseController -> MainForm : RequestInput(input)
+  MainForm -> InputForm : ShowDialog()
+  Пользователь -> InputForm : вводит сигналы, выбирает алфавит
+  InputForm --> MainForm : MorseInput
+  MainForm --> MorseController : MorseInput
+  MorseController -> MorseModel : Decode(input)
+  MorseModel -> MorseTranslator : Decode(signals, alphabet)
+  alt данные корректны
+    MorseTranslator --> MorseModel : DecodeResult
+    MorseModel -> MorseModel : сохранить состояние
+    MorseModel -> MainForm : ModelChanged()
+    MainForm -> MorseModel : чтение Signals, DecodedText, ...
+    MainForm -> MainForm : обновить метки
+  else ошибка
+    MorseTranslator --> MorseController : MorseDecodeException
+    MorseController -> MainForm : ShowError(message)
+  end
+end
+@enduml

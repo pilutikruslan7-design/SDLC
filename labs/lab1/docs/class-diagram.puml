@@ -1,0 +1,93 @@
+@startuml MorseDecoder_MVC
+title Декодер азбуки Морзе — MVC с активной моделью (диаграмма классов)
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+
+package Model {
+  enum MorseAlphabet {
+    Russian
+    Latin
+  }
+
+  class MorseInput <<record>> {
+    +Signals : string
+    +Alphabet : MorseAlphabet
+  }
+
+  class DecodeResult <<record>> {
+    +Text : string
+    +SymbolCount : int
+    +WordCount : int
+  }
+
+  interface IMorseModelObserver {
+    +ModelChanged() : void
+  }
+
+  class MorseModel {
+    -_observers : List<IMorseModelObserver>
+    +Signals : string
+    +Alphabet : MorseAlphabet
+    +DecodedText : string
+    +SymbolCount : int
+    +WordCount : int
+    +HasResult : bool
+    +LastInput : MorseInput
+    +Attach(o : IMorseModelObserver) : void
+    +Detach(o : IMorseModelObserver) : void
+    +Decode(input : MorseInput) : void
+    -NotifyObservers() : void
+  }
+
+  class MorseTranslator <<static>> {
+    +Decode(signals : string, alphabet : MorseAlphabet) : DecodeResult
+    -Normalize(signals : string) : string
+  }
+
+  class MorseTable <<static>> {
+    +TryGetSymbol(code : string, alphabet : MorseAlphabet, out symbol : char) : bool
+  }
+
+  class MorseDecodeException
+}
+
+package View {
+  interface IMainView {
+    +EnterDataRequested : EventHandler
+    +RequestInput(initial : MorseInput) : MorseInput
+    +ShowError(message : string) : void
+  }
+
+  class MainForm {
+    +ModelChanged() : void
+    +RequestInput(initial : MorseInput) : MorseInput
+    +ShowError(message : string) : void
+  }
+
+  class InputForm {
+    +Result : MorseInput
+  }
+}
+
+package Controller {
+  class MorseController {
+    -_model : MorseModel
+    -_view : IMainView
+    -OnEnterDataRequested(sender, e) : void
+  }
+}
+
+MainForm ..|> IMainView
+MainForm ..|> IMorseModelObserver
+MainForm --> MorseModel : читает состояние
+MainForm ..> InputForm : открывает
+
+MorseModel o--> "*" IMorseModelObserver : уведомляет
+MorseModel ..> MorseTranslator
+MorseTranslator ..> MorseTable
+MorseTranslator ..> MorseDecodeException : бросает
+MorseTranslator ..> DecodeResult
+
+MorseController --> MorseModel : Decode()
+MorseController --> IMainView : подписка на события
+@enduml
