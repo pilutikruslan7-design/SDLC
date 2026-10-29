@@ -5,7 +5,7 @@
  */
 package PillTrackMockups {
 
-    /** Экран 1. Сегодня (REQ-FUNC-004, REQ-FUNC-007, REQ-FUNC-008, REQ-FUNC-012, REQ-FUNC-019). */
+    /** Экран 1. Сегодня (REQ-FUNC-004, REQ-FUNC-007, REQ-FUNC-008, REQ-FUNC-012, REQ-FUNC-019, REQ-FUNC-021). */
     package TodayMockup {
         private import UiKit::*;
 
@@ -17,10 +17,14 @@ package PillTrackMockups {
                 attribute :>> active = "Сегодня";
                 attribute :>> user = "Профиль: Я ▾";
             }
+            part missed : Banner {
+                attribute :>> text = "Пока компьютер был выключен, пропущено напоминаний: 1 (28.10, 21:00 — Аторвастатин 20 мг). Отметьте, был ли приём.";
+                attribute :>> tone = Tone::warning;
+            }
             part stats : Row {
                 part done : StatCard {
                     attribute :>> label = "Приёмов сегодня";
-                    attribute :>> text = "3 из 7";
+                    attribute :>> text = "2 из 6";
                 }
                 part adherence : StatCard {
                     attribute :>> label = "Соблюдение за 7 дней";
@@ -43,11 +47,10 @@ package PillTrackMockups {
                     attribute :>> weight = 3;
                     part doses : Table {
                         attribute :>> columns = ("Время", "Препарат", "Доза", "Указание", "Статус", "Действия");
-                        part r1 : TableRow { attribute :>> cells = ("08:00", "Метформин 500 мг", "1 таб.", "после еды", "✓ принято 08:04", "Исправить"); }
+                        part r1 : TableRow { attribute :>> cells = ("08:00", "Метформин 500 мг", "½ таб.", "после еды", "✓ принято 08:04", "Исправить"); }
                         part r2 : TableRow { attribute :>> cells = ("08:00", "Амоксициллин 500 мг", "1 капс.", "после еды", "✓ принято 08:04", "Исправить"); }
-                        part r3 : TableRow { attribute :>> cells = ("09:00", "Витамин D3 2000 МЕ", "1 капс.", "—", "✗ пропущено", "Исправить"); }
                         part r4 : TableRow { attribute :>> cells = ("14:00", "Амоксициллин 500 мг", "1 капс.", "после еды", "отложено до 14:10", "Принято · Пропустить"); }
-                        part r5 : TableRow { attribute :>> cells = ("20:00", "Метформин 500 мг", "1 таб.", "после еды", "ожидает", "Принято · Пропустить"); }
+                        part r5 : TableRow { attribute :>> cells = ("20:00", "Метформин 500 мг", "½ таб.", "после еды", "ожидает", "Принято · Пропустить"); }
                         part r6 : TableRow { attribute :>> cells = ("20:00", "Амоксициллин 500 мг", "1 капс.", "после еды", "ожидает", "Принято · Пропустить"); }
                         part r7 : TableRow { attribute :>> cells = ("21:00", "Аторвастатин 20 мг", "1 таб.", "вечером", "ожидает", "Принято · Пропустить"); }
                     }
@@ -69,8 +72,8 @@ package PillTrackMockups {
                         attribute :>> columns = ("Препарат", "Осталось", "Хватит до");
                         part s1 : TableRow { attribute :>> cells = ("Аторвастатин", "4 таб.", "01.11 ⚠"); }
                         part s2 : TableRow { attribute :>> cells = ("Амоксициллин", "9 капс.", "01.11 ⚠"); }
-                        part s3 : TableRow { attribute :>> cells = ("Витамин D3", "18 капс.", "11.12"); }
-                        part s4 : TableRow { attribute :>> cells = ("Метформин", "46 таб.", "21.11"); }
+                        part s3 : TableRow { attribute :>> cells = ("Витамин D3", "18 капс.", "18.12"); }
+                        part s4 : TableRow { attribute :>> cells = ("Метформин", "23 таб.", "21.11"); }
                     }
                     part refill : Button {
                         attribute :>> text = "Пополнить запас";
@@ -80,7 +83,7 @@ package PillTrackMockups {
         }
     }
 
-    /** Экран 2. Препараты и курсы (REQ-FUNC-001, REQ-FUNC-003, REQ-FUNC-010, REQ-FUNC-011, REQ-FUNC-012). */
+    /** Экран 2. Препараты и курсы (REQ-FUNC-001, REQ-FUNC-003, REQ-FUNC-010, REQ-FUNC-011, REQ-FUNC-012, REQ-FUNC-022). */
     package MedicinesMockup {
         private import UiKit::*;
 
@@ -111,11 +114,11 @@ package PillTrackMockups {
             }
             part list : Table {
                 attribute :>> columns = ("Препарат", "Доза", "Схема", "Время", "Курс", "Остаток", "Хватит до", "Действия");
-                part m1 : TableRow { attribute :>> cells = ("Метформин 500 мг", "1 таб.", "ежедневно", "08:00, 20:00", "бессрочно", "46 таб.", "21.11.2026", "Изменить · Завершить"); }
-                part m2 : TableRow { attribute :>> cells = ("Амоксициллин 500 мг", "1 капс.", "ежедневно", "08, 14, 20 ч", "27.10–02.11", "9 капс.", "01.11.2026 ⚠", "Изменить · Завершить"); }
-                part m3 : TableRow { attribute :>> cells = ("Аторвастатин 20 мг", "1 таб.", "ежедневно", "21:00", "бессрочно", "4 таб.", "01.11.2026 ⚠", "Изменить · Завершить"); }
-                part m4 : TableRow { attribute :>> cells = ("Витамин D3 2000 МЕ", "1 капс.", "пн, ср, пт", "09:00", "до 31.12", "18 капс.", "11.12.2026", "Изменить · Завершить"); }
-                part m5 : TableRow { attribute :>> cells = ("Ибупрофен 200 мг", "1 таб.", "по необх.", "—", "—", "9 таб.", "—", "Изменить · Завершить"); }
+                part m1 : TableRow { attribute :>> cells = ("Метформин 500 мг", "½ таб.", "ежедневно", "08:00, 20:00", "бессрочно", "23 таб.", "21.11.2026", "Изменить · Пауза · Завершить"); }
+                part m2 : TableRow { attribute :>> cells = ("Амоксициллин 500 мг", "1 капс.", "ежедневно", "08, 14, 20 ч", "27.10–02.11", "9 капс.", "01.11.2026 ⚠", "Изменить · Пауза · Завершить"); }
+                part m3 : TableRow { attribute :>> cells = ("Аторвастатин 20 мг", "1 таб.", "ежедневно", "21:00", "бессрочно", "4 таб.", "01.11.2026 ⚠", "Изменить · Пауза · Завершить"); }
+                part m4 : TableRow { attribute :>> cells = ("Витамин D3 2000 МЕ", "1 капс.", "пн, ср, пт", "09:00", "пауза до 05.11", "18 капс.", "18.12.2026", "Изменить · Возобновить"); }
+                part m5 : TableRow { attribute :>> cells = ("Ибупрофен 200 мг", "1 таб.", "по необх.", "—", "—", "9 таб.", "—", "Изменить · Пауза · Завершить"); }
             }
             part footer : Label {
                 attribute :>> text = "Показано 5 из 5 · завершённых курсов: 2 · ⚠ — запас закончится раньше, чем через 5 дней";
@@ -154,7 +157,7 @@ package PillTrackMockups {
                         attribute :>> text = "Ежедневно";
                     }
                     part amount : NumberField {
-                        attribute :>> label = "Количество на приём *";
+                        attribute :>> label = "Количество на приём * (шаг ¼)";
                         attribute :>> text = "1";
                     }
                     part instruction : Select {
